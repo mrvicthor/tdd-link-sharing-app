@@ -1,22 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Link Sharing App</title>
-    <link rel="stylesheet" href="./css/styles.css" />
-  </head>
-  <body>
-    <main class="main">
-      <section class="login-margin">
-        <section class="login-wrapper">
-          <div class="text-centre devlinks-logo">
-            <img
-              src="/assets/images/logo-devlinks-large.svg"
-              alt="devlinks logo"
-            />
-          </div>
-          <form class="bg-white login-form">
+import { JSDOM } from "jsdom";
+
+// import Auth from "../src/public/js/Auth/Auth";
+
+describe("Input Field Validation", () => {
+  let document: Document;
+
+  beforeEach(() => {
+    const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
+    document = dom.window.document;
+    document.body.innerHTML = `
+    <form class="bg-white login-form">
             <h1 class="text-xl capitalise">login</h1>
             <p class="mt-1 text-dark-gray text-sm capitalise">
               add your details below to get back into the app
@@ -61,8 +54,14 @@
               <span class="text-primary">Create Account</span>
             </p>
           </form>
-        </section>
-      </section>
-    </main>
-  </body>
-</html>
+    `;
+  });
+
+  test("input should be empty initially", () => {
+    const form = document.querySelector(".login-form") as HTMLFormElement;
+    const email = form.querySelector("#email") as HTMLInputElement;
+    const password = form.querySelector("#password") as HTMLInputElement;
+    expect(email.value).toBe("");
+    expect(password.value).toBe("");
+  });
+});

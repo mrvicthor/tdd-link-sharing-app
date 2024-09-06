@@ -37,8 +37,9 @@ body {
 
 .login-wrapper {
   margin: auto;
-  width: 29.75rem;
+  max-width: 29.75rem;
   height: 44.3125rem;
+  width: 90%;
 }
 
 .login-form {
@@ -53,4 +54,116 @@ body {
 
 .text-centre {
   text-align: center;
+}
+
+.devlinks-logo {
+  text-align: left;
+}
+
+.text-gray {
+  color: #d9d9d9;
+}
+
+.text-dark-gray {
+  color: #737373;
+}
+
+.text-primary {
+  color: #633cff;
+}
+
+.capitalise {
+  text-transform: capitalize;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.text-xl {
+  font-size: 1.5rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.btn {
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  height: 2.875rem;
+}
+
+.btn-large {
+  width: 100%;
+}
+
+.btn-primary {
+  background-color: #633cff;
+}
+
+.btn-primary:hover {
+  background-color: #beadff;
+}
+
+.input-wrapper {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 100%;
+  height: 3rem;
+  margin-top: 0.5rem;
+  align-items: center;
+  gap: 1rem;
+}
+
+.input-wrapper > input {
+  outline: none;
+  border: none;
+  width: 100%;
+}
+
+input::placeholder {
+  color: #d9d9d9;
+}
+
+.input-wrapper:focus-within {
+  border-color: #633cff;
+  box-shadow: #efebff 0px 2px 16px 8px;
+}
+
+@media screen and (min-width: 400px) {
+  .devlinks-logo {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .main {
+    padding-inline: 1rem;
+  }
 }
