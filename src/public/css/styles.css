@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+p,
+li,
+figcaption {
+  text-wrap: pretty;
+  max-width: 65ch;
+}
+
+header,
+footer,
+main,
+section,
+article {
+  container-type: inline-size;
+}
+
+body {
+  background-color: #fafafa;
+  font-family: "Instrument Sans", sans-serif;
+}
+
+.login-margin {
+  margin-top: 8.625rem;
+}
+
+.login-wrapper {
+  margin: auto;
+  width: 29.75rem;
+  height: 44.3125rem;
+}
+
+.login-form {
+  margin-top: 2rem;
+  border-radius: 8px;
+  padding: 1.5rem 1.5rem 2rem;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.text-centre {
+  text-align: center;
+}

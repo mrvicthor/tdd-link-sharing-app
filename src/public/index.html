@@ -4,9 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Link Sharing App</title>
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <h1>Link Sharing App</h1>
-    <p>This is a link sharing app by Victor Eleanya</p>
+    <main class="main">
+      <section class="login-margin">
+        <section class="login-wrapper">
+          <div class="text-centre">
+            <img
+              src="/assets/images/logo-devlinks-large.svg"
+              alt="devlinks logo"
+            />
+          </div>
+          <form class="bg-white login-form">
+            <h1>login</h1>
+            <small>add your details below to get back into the app</small>
+            <div>
+              <label for="email">email address</label>
+              <input type="email" name="email" id="email" />
+            </div>
+            <div>
+              <label for="password">password</label>
+              <input type="password" name="password" id="password" />
+            </div>
+            <button type="submit">login</button>
+            <p>Don't have an account? Create Account</p>
+          </form>
+        </section>
+      </section>
+    </main>
   </body>
 </html>
