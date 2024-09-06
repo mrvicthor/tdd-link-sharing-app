@@ -1,11 +1,13 @@
 import { JSDOM } from "jsdom";
 
-// import Auth from "../src/public/js/Auth/Auth";
+import Auth from "../src/public/js/auth/auth";
 
 describe("Input Field Validation", () => {
   let document: Document;
+  let auth: Auth;
 
   beforeEach(() => {
+    auth = new Auth();
     const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
     document = dom.window.document;
     document.body.innerHTML = `
@@ -63,5 +65,25 @@ describe("Input Field Validation", () => {
     const password = form.querySelector("#password") as HTMLInputElement;
     expect(email.value).toBe("");
     expect(password.value).toBe("");
+  });
+
+  test("input field should not be empty after entering a value", () => {
+    const form = document.querySelector(".login-form") as HTMLFormElement;
+    const email = form.querySelector("#email") as HTMLInputElement;
+    const password = form.querySelector("#password") as HTMLInputElement;
+    email.value = "alex@email.com";
+    password.value = "password";
+    expect(email.value).not.toBe("");
+    expect(password.value).not.toBe("");
+  });
+
+  test("checkIsInputEmpty function should check if input is empty or not", () => {
+    const form = document.querySelector(".login-form") as HTMLFormElement;
+    const email = form.querySelector("#email") as HTMLInputElement;
+    const password = form.querySelector("#password") as HTMLInputElement;
+    email.value = "alex@email.com";
+    password.value = "password";
+    expect(auth.checkIsInputEmpty(email)).toBe(false);
+    expect(auth.checkIsInputEmpty(password)).toBe(false);
   });
 });
