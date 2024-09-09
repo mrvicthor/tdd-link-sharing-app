@@ -145,6 +145,7 @@ body {
   outline: none;
   border: none;
   width: 100%;
+  caret-color: #633cff;
 }
 
 input::placeholder {
@@ -154,6 +155,10 @@ input::placeholder {
 .input-wrapper:focus-within {
   border-color: #633cff;
   box-shadow: #efebff 0px 2px 16px 8px;
+}
+
+.login-link {
+  text-decoration: none;
 }
 
 @media screen and (min-width: 400px) {

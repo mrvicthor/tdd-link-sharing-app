@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { UserModel } from "../db/models/users";
-import { random, authentication } from "../helpers";
+import {
+  random,
+  authentication,
+  verificationToken,
+  transporter,
+} from "../helpers";
 export class authController {
   static async register(req: Request, res: Response) {
     try {
@@ -20,19 +25,54 @@ export class authController {
           salt,
           password: authentication(salt, password),
         },
+        isVerified: false,
+        verificationToken,
       });
 
       await user.save().then((user) => user.toObject());
+
+      const verificationLink = `http://localhost:8080/verify/${verificationToken}`;
+
+      const mailOptions = {
+        from: "victoreleanya89@gmail.com",
+        to: email,
+        subject: "Verify your email",
+        html: `Please click this link to verify your email: <a href="${verificationLink}">${verificationLink}</a>`,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log("Error sending email: ", error);
+        } else {
+          console.log("Verification email sent: ", info.response);
+        }
+      });
       return res
         .status(200)
         .json({
           message: "User created successfully",
-          data: user,
+          data: user.toObject(),
         })
         .end();
     } catch (error) {
       console.log(error);
       return res.sendStatus(400);
+    }
+  }
+
+  static async verifyEmail(req: Request, res: Response) {
+    try {
+      const { token } = req.params;
+      const user = await UserModel.findOne({ verificationToken: token });
+      if (!user) {
+        return res.status(400).json({ message: "Invalid token" });
+      }
+      user.isVerified = true;
+      user.verificationToken = undefined;
+      await user.save();
+      return res.status(200).json({ message: "Email verified successfully" });
+    } catch (error: any) {
+      throw new Error(error.message);
     }
   }
 

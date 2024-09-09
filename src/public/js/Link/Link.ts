@@ -6,7 +6,6 @@ class Link {
 
   createLink(link: string): void {
     this.linkStr = link;
-    console.log(this.linkStr);
   }
 }
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserModel } from "../db/models/users";
-import { get, identity, merge } from "lodash";
+import { merge } from "lodash";
 
 export const isAuthenticated = async (
   req: Request,

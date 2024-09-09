@@ -7,6 +7,8 @@ interface IUser {
     salt: string;
     sessionToken: string;
   };
+  isVerified: boolean;
+  verificationToken: string | undefined;
 }
 
 const userSchema = new Schema<IUser>({
@@ -16,6 +18,8 @@ const userSchema = new Schema<IUser>({
     salt: { type: String, select: false },
     sessionToken: { type: String, select: false },
   },
+  isVerified: { type: Boolean, default: false },
+  verificationToken: { type: String, default: "" },
 });
 
 export const UserModel = model<IUser>("User", userSchema);
