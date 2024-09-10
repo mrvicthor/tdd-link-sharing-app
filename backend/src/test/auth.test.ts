@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 
-import Auth from "../src/public/js/auth/auth";
+import Auth from "../public/js/auth/auth";
 
 describe("Input Field Validation", () => {
   let document: Document;

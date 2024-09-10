@@ -10,6 +10,7 @@ export class authController {
   static async register(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
+      console.log(req.body, "body");
       if (!email || !password) {
         return res.sendStatus(400);
       }
@@ -70,6 +71,7 @@ export class authController {
       user.isVerified = true;
       user.verificationToken = undefined;
       await user.save();
+      res.redirect(`http://localhost:8080/login.html?token=${token}`);
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error: any) {
       throw new Error(error.message);
@@ -93,11 +95,13 @@ export class authController {
         return res.sendStatus(403);
       }
       const salt = random();
+
       user.authentication.sessionToken = authentication(
         salt,
         user._id.toString()
       );
       await user.save();
+
       res.cookie("VICTOR-AUTH", user.authentication.sessionToken, {
         domain: "localhost",
         path: "/",

@@ -1,4 +1,4 @@
-import { Link } from "../src/public/js/Link/Link";
+import { Link } from "../public/js/Link/Link";
 
 describe("Link", () => {
   let link: Link;
