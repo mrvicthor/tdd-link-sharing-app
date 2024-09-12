@@ -163,8 +163,10 @@ body {
 .register-form-input > input {
   outline: none;
   border: none;
+  flex: 1 1 200px;
   width: 100%;
   caret-color: var(--primary-color);
+  background-color: transparent;
 }
 
 input::placeholder {
@@ -176,6 +178,9 @@ input::placeholder {
   box-shadow: #efebff 0px 2px 16px 8px;
 }
 
+.flex-item-3 {
+  flex: 0 1 auto;
+}
 .error-wrapper:focus-within {
   border-color: var(--error-color);
 }
@@ -198,6 +203,8 @@ input::placeholder {
 
 .error-message {
   color: var(--error-color);
+  text-align: right;
+  /* margin-right: auto; */
 }
 
 @media screen and (min-width: 400px) {
@@ -212,12 +219,12 @@ input::placeholder {
   }
 
   .text-xs {
-    width: 9rem;
+    /* width: 9rem; */
   }
 }
 
 @media screen and (max-width: 375px) {
   .text-xs {
-    width: 9rem;
+    /* width: 9rem; */
   }
 }

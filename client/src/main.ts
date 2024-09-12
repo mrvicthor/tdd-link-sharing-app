@@ -41,7 +41,7 @@ if (userIsVerified === true) {
                   id="email"
                   placeholder="e.g. alex@email.com "
                 />
-                <p class='error-message text-xs hide'>Can't be empty</p>
+                <p class='error-message text-xs flex-item-3' id="emailError"></p>
               </div>
             </div>
             <div class="mt-1">
@@ -59,10 +59,11 @@ if (userIsVerified === true) {
                   id="password"
                   placeholder="At least 8 characters"
                 />
+                 <p class='error-message text-xs flex-item-3' id="passwordError"></p>
               </div>
             </div>
             <div class="mt-1">
-              <label class="capitalise font-light text-sm" for="password"
+              <label class="capitalise font-light text-sm" for="confirm-password"
                 >confirm password</label
               >
               <div class="input-wrapper register-form-input flex">
@@ -76,6 +77,7 @@ if (userIsVerified === true) {
                   id="confirm-password"
                   placeholder="At least 8 characters"
                 />
+                 <p class='error-message text-xs flex-item-3' id="confirmPasswordError"></p>
               </div>
             </div>
             <p class="mt-1 text-dark-gray capitalise text-sm">
@@ -129,29 +131,57 @@ const password = document.querySelector<HTMLInputElement>("#password")!;
 const confirmPassword =
   document.querySelector<HTMLInputElement>("#confirm-password")!;
 
+const inputs = [email, password, confirmPassword];
+
 registerform.addEventListener("submit", (e) => {
   e.preventDefault();
+
   let auth = new Auth(
     email.value.trim(),
     password.value.trim(),
     confirmPassword.value.trim()
   );
+  console.log("back here", auth);
   const result = registerSchema.safeParse(auth);
-  const errors = result.success ? {} : result.error.format();
 
-  if (
-    errors &&
-    email &&
-    email?.parentElement?.classList.contains("input-wrapper")
-  ) {
-    email?.parentElement?.classList.remove("input-wrapper");
-    email?.parentElement?.classList.add("error-wrapper");
-    email?.parentElement?.parentElement
-      ?.querySelector('label[for="email"]')
-      ?.classList.add("error-message");
-    email?.parentElement?.parentElement
-      ?.querySelector("p.error-message")
-      ?.classList.remove("hide");
-    email?.parentElement?.querySelector<HTMLInputElement>("input")?.focus();
+  function displayError(input: HTMLInputElement, message: string, id: string) {
+    const parent = input.parentElement as HTMLElement;
+
+    const errorElement = document.getElementById(`${id}`) as HTMLElement;
+    if (errorElement) errorElement.innerHTML = message;
+    auth.clearError(parent, message);
+  }
+
+  if (!result.success) {
+    const formattedErrors = result.error.format();
+    displayError(
+      email,
+      formattedErrors.email?._errors.join(", ") || "",
+      "emailError"
+    );
+
+    displayError(
+      password,
+      formattedErrors.password?._errors.join(", ") || "",
+      "passwordError"
+    );
+
+    displayError(
+      confirmPassword,
+      formattedErrors.confirmPassword?._errors.join(", ") || "",
+      "confirmPasswordError"
+    );
+    if (
+      inputs.some((input) =>
+        input.parentElement?.classList.contains("error-wrapper")
+      )
+    ) {
+      inputs.forEach((input) => {
+        console.log("changing");
+        input.removeEventListener("input", auth.handleInputChange);
+        input.addEventListener("input", auth.handleInputChange);
+      });
+    }
+    return;
   }
 });
