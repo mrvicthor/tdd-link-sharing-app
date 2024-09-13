@@ -5,13 +5,37 @@ import Auth from "./auth";
 import { registerSchema } from "./helpers/schema";
 
 let userIsVerified: boolean | undefined = undefined;
+let user;
 const url = "http://127.0.0.1:5173/";
+const serverUrl = "http://localhost:8080";
 let innerHTML = "";
+
+function verifyEmail() {
+  console.log("verifying");
+  const url = window.location.href;
+  const token = url.split("/").pop();
+  fetch(`${serverUrl}/auth/verify/${token}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
 
 if (userIsVerified === true) {
   innerHTML = `<p>Welcome ${userIsVerified}</p>`;
 } else if (userIsVerified === false) {
   innerHTML = `<p>Logout ${userIsVerified}</p>`;
+} else if (
+  userIsVerified === undefined &&
+  window.location.pathname.includes("/verify")
+) {
+  innerHTML = `<section class="login-margin">
+  <div><p>please verify your email</p>
+  <button id="verifyBtn" class="mt-1 btn btn-primary btn-large capitalise font-bold">
+    verify email
+  </button>
+  </div></section>`;
 } else {
   innerHTML = `<section class="login-margin">
         <section class="login-wrapper">
@@ -104,6 +128,12 @@ if (userIsVerified === true) {
 }
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = innerHTML;
+
+if (window.location.pathname.includes("/verify")) {
+  document
+    .querySelector<HTMLButtonElement>("#verifyBtn")!
+    .addEventListener("click", verifyEmail);
+}
 // document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 //   <div>
 //     <a href="https://vitejs.dev" target="_blank">
@@ -122,9 +152,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = innerHTML;
 //   </div>
 // `;
 
-const registerform = document.querySelector(
-  ".register-form"
-) as HTMLFormElement;
+const registerform = document.querySelector<HTMLFormElement>(".register-form")!;
 
 const email = document.querySelector<HTMLInputElement>("#email")!;
 const password = document.querySelector<HTMLInputElement>("#password")!;
@@ -141,7 +169,6 @@ registerform.addEventListener("submit", (e) => {
     password.value.trim(),
     confirmPassword.value.trim()
   );
-  console.log("back here", auth);
   const result = registerSchema.safeParse(auth);
 
   function displayError(input: HTMLInputElement, message: string, id: string) {
@@ -184,4 +211,22 @@ registerform.addEventListener("submit", (e) => {
     }
     return;
   }
+  const dataToSend = {
+    email: auth.email,
+    password: auth.password,
+  };
+
+  fetch(`${serverUrl}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dataToSend),
+  })
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
 });
