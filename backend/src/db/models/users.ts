@@ -1,4 +1,10 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
+
+interface ILink {
+  _id: Types.ObjectId;
+  title: string;
+  url: string;
+}
 
 interface IUser {
   email: string;
@@ -9,6 +15,7 @@ interface IUser {
   };
   isVerified: boolean;
   verificationToken: string | undefined;
+  links: ILink[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -20,6 +27,12 @@ const userSchema = new Schema<IUser>({
   },
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String, default: "" },
+  links: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Link",
+    },
+  ],
 });
 
 export const UserModel = model<IUser>("User", userSchema);

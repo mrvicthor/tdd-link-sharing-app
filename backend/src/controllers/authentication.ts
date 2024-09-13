@@ -7,7 +7,7 @@ import {
   transporter,
 } from "../helpers";
 export class authController {
-  static async register(req: Request, res: Response) {
+  async register(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
       console.log(req.body, "body");
@@ -61,7 +61,8 @@ export class authController {
     }
   }
 
-  static async verifyEmail(req: Request, res: Response) {
+  async verifyEmail(req: Request, res: Response) {
+    console.log(req.params, "params");
     try {
       const { token } = req.params;
       const user = await UserModel.findOne({ verificationToken: token });
@@ -71,14 +72,18 @@ export class authController {
       user.isVerified = true;
       user.verificationToken = undefined;
       await user.save();
-      res.redirect(`http://localhost:8080/login.html?token=${token}`);
+      if (req.method === "GET") {
+        return res.redirect(
+          `http://127.0.0.1:5173/?verified=true&token=${token}`
+        );
+      }
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
 
-  static async login(req: Request, res: Response) {
+  async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
       if (!email || !password) {
