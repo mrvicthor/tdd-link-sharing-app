@@ -12,7 +12,7 @@ export class UserController {
     }
   }
 
-  async getUserBySessionToken(sessionToken: string) {
+  static async getUserBySessionToken(sessionToken: string) {
     return UserModel.findOne({
       "authentication.sessionToken": sessionToken,
     });

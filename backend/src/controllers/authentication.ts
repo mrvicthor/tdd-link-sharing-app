@@ -72,11 +72,11 @@ export class authController {
       user.isVerified = true;
       user.verificationToken = undefined;
       await user.save();
-      if (req.method === "GET") {
-        return res.redirect(
-          `http://127.0.0.1:5173/?verified=true&token=${token}`
-        );
-      }
+      // if (req.method === "GET") {
+      //   return res.redirect(
+      //     `http://127.0.0.1:5173/?verified=true&token=${token}`
+      //   );
+      // }
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error: any) {
       throw new Error(error.message);
