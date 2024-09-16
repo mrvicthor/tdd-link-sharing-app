@@ -1,4 +1,4 @@
-import { fetchCurrentUser, loginSchema } from "../auth";
+import { loginSchema, setCurrentUser } from "../auth";
 
 export default function Login(): string {
   return `
@@ -85,7 +85,7 @@ export function initLogin() {
     };
 
     const result = loginSchema.safeParse(dataToSend);
-    console.log("logging in", dataToSend);
+    console.log("logging in", result);
     try {
       const response = await fetch(`${serverUrl}/auth/login`, {
         method: "POST",
@@ -96,20 +96,23 @@ export function initLogin() {
         credentials: "include",
       });
 
-      console.log("Response status:", response.status);
-      console.log("Response headers:", [...response.headers.entries()]);
-      for (const [key, value] of response.headers.entries()) {
-        console.log(`${key}: ${value}`);
-      }
       if (!response.ok) {
         throw new Error("Failed to log in");
       }
-      const data = await response.json();
-      console.log("data", data.token);
-      localStorage.setItem("token", data.token);
-      const user = await fetchCurrentUser(data.token);
-      if (user) {
-        if (user.isVerified) {
+      const result = await response.json();
+      const { data } = result;
+
+      const dataToShow = {
+        _id: data._id,
+        email: data.email,
+        isVerified: data.isVerified,
+      };
+
+      setCurrentUser(dataToShow);
+      if (data) {
+        console.log("data", data);
+        debugger;
+        if (data.isVerified) {
           window.location.href = "/dashboard";
         } else {
           window.location.href = "/verify-email";

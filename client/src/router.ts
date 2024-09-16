@@ -1,12 +1,7 @@
 import SignUp, { initSignUp } from "./pages/SignUp";
 import Login, { initLogin } from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import {
-  isEmailVerified,
-  isAuthenticated,
-  getCurrentUser,
-  fetchCurrentUser,
-} from "./auth";
+import { getCurrentUser } from "./auth";
 import EmailVerification, {
   initEmailVerification,
 } from "./pages/EmailVerification";
@@ -17,12 +12,12 @@ export const router = async () => {
 
   if (!app) return;
 
-  if (isAuthenticated() && !getCurrentUser()) {
-    const token = localStorage.getItem("token");
-    if (token) {
-      await fetchCurrentUser(token);
-    }
-  }
+  // if (isAuthenticated() && !getCurrentUser()) {
+  //   const user = getCurrentUser();
+  //   if (user) {
+  //     set;
+  //   }
+  // }
 
   switch (path) {
     case "/signup":
@@ -34,12 +29,8 @@ export const router = async () => {
       initLogin();
       break;
     case "/dashboard":
-      if (isAuthenticated()) {
-        if (isEmailVerified()) {
-          app.innerHTML = Dashboard();
-        } else {
-          window.location.href = "/verify-email";
-        }
+      if (getCurrentUser()) {
+        app.innerHTML = Dashboard();
       } else {
         window.location.href = "/login";
       }

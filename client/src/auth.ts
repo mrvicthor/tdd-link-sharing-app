@@ -22,20 +22,10 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
-export function isAuthenticated(): boolean {
-  return localStorage.getItem("token") !== null;
-}
 export const loginSchema = z.object({
   email: z.string().email({ message: "Can't be empty" }),
   password: z.string().min(8, { message: "Please check again" }),
 });
-
-export function isEmailVerified(): boolean {
-  // This is a placeholder. In a real application, you would typically
-  // check this information from your backend or store it in localStorage
-  // after receiving confirmation from the server.
-  return localStorage.getItem("emailVerified") === "true";
-}
 
 export function setCurrentUser(user: User) {
   localStorage.setItem("currentUser", JSON.stringify(user));
@@ -49,29 +39,6 @@ export function getCurrentUser(): User | null {
   return result.success ? result.data : null;
 }
 
-export async function fetchCurrentUser(token: string): Promise<User | null> {
-  try {
-    const response = await fetch(`http://localhost:8080/user`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      throw new Error("Failed to fetch current user");
-    }
-    const userData = await response.json();
-    const result = userSchema.safeParse(userData);
-    if (!result.success) {
-      throw new Error("Failed to parse user data");
-    } else {
-      setCurrentUser(result.data);
-      return result.data;
-    }
-  } catch (error) {
-    console.error("Error fetching current user:", error);
-    return null;
-  }
-}
 class Auth {
   email: string;
   password: string;
