@@ -10,7 +10,6 @@ export class authController {
   async register(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      console.log(req.body, "body");
       if (!email || !password) {
         return res.sendStatus(400);
       }
@@ -62,7 +61,6 @@ export class authController {
   }
 
   async verifyEmail(req: Request, res: Response) {
-    console.log(req.params, "params");
     try {
       const { token } = req.params;
       const user = await UserModel.findOne({ verificationToken: token });
@@ -72,11 +70,12 @@ export class authController {
       user.isVerified = true;
       user.verificationToken = undefined;
       await user.save();
-      // if (req.method === "GET") {
-      //   return res.redirect(
-      //     `http://127.0.0.1:5173/?verified=true&token=${token}`
-      //   );
-      // }
+      if (req.method === "GET") {
+        return res.redirect(
+          `http://127.0.0.1:5173/?verified=true&token=${token}`
+        );
+      }
+      // res.redirect("http://localhost:5173/login");
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error: any) {
       throw new Error(error.message);
@@ -95,6 +94,7 @@ export class authController {
       if (!user) {
         return res.sendStatus(400);
       }
+
       const expectedHash = authentication(user.authentication.salt, password);
       if (user.authentication.password !== expectedHash) {
         return res.sendStatus(403);
@@ -111,6 +111,7 @@ export class authController {
         domain: "localhost",
         path: "/",
       });
+
       return res
         .status(200)
         .json({
